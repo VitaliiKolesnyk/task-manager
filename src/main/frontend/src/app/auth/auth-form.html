@@ -1,0 +1,35 @@
+<div class="auth-wrap">
+  <form class="auth-card" (ngSubmit)="submit()">
+    <h1>{{ heading }}</h1>
+
+    <label>
+      <span>Username</span>
+      <input
+        type="text"
+        name="username"
+        autocomplete="username"
+        [ngModel]="username()"
+        (ngModelChange)="username.set($event)"
+      />
+    </label>
+
+    <label>
+      <span>Password</span>
+      <input
+        type="password"
+        name="password"
+        autocomplete="current-password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+      />
+    </label>
+
+    <p *ngIf="error()" class="error">{{ error() }}</p>
+
+    <button type="submit" [disabled]="loading()">{{ submitLabel }}</button>
+
+    <p class="alt">
+      {{ altText }} <a [routerLink]="altLink">{{ altLabel }}</a>
+    </p>
+  </form>
+</div>

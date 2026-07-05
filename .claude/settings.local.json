@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem C:\\\\Users\\\\admin\\\\IdeaProjects\\\\task-manager\\\\src -Recurse -Force -File | ForEach-Object { $_.FullName })",
+      "Bash(npm --version)",
+      "Bash(node --version)",
+      "Bash(rm -rf node_modules)",
+      "Bash(npm ci *)",
+      "Bash(./mvnw.cmd clean *)",
+      "PowerShell($j = \\(Get-Command java -ErrorAction SilentlyContinue\\).Source; if \\(-not $j -and $env:JAVA_HOME\\) { $j = Join-Path $env:JAVA_HOME 'bin\\\\java.exe' }; \"java=$j\"; if \\($j\\) { & $j -version })"
+    ]
+  },
+  "companyAnnouncements": [
+    "Welcome! New to this codebase? Ask Clause Code 'Explain architecture of this project'.",
+    "Follow our coding guidelines before commiting changes."
+  ]
+}

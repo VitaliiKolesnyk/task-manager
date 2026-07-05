@@ -1,0 +1,96 @@
+.page {
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.new-task input,
+.new-task textarea,
+.task input[type='text'],
+.task textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #cbd2d9;
+  border-radius: 4px;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.new-task textarea,
+.task textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #3f6df8;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #b0b8c1;
+  cursor: not-allowed;
+}
+
+button.danger {
+  background: #e53e3e;
+}
+
+.filters {
+  margin-bottom: 12px;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.task-body h3 {
+  margin: 0;
+}
+
+.task-body p {
+  margin: 4px 0;
+  color: #4a5568;
+}
+
+.task-body small {
+  color: #718096;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.task.done .task-body h3 {
+  text-decoration: line-through;
+  color: #718096;
+}
+
+.empty {
+  text-align: center;
+  color: #718096;
+  padding: 24px;
+}

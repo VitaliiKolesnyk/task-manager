@@ -1,0 +1,11 @@
+<header class="app-header">
+  <h1>Task Manager</h1>
+  <div class="header-right" *ngIf="auth.isAuthenticated()">
+    <span class="user" *ngIf="auth.username()">{{ auth.username() }}</span>
+    <button type="button" class="logout" (click)="logout()">Logout</button>
+  </div>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

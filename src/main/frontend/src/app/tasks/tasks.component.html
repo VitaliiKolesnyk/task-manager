@@ -1,0 +1,67 @@
+<div class="page">
+  <section class="new-task card">
+    <h2>Add task</h2>
+    <input
+      type="text"
+      placeholder="Title"
+      [ngModel]="newTitle()"
+      (ngModelChange)="newTitle.set($event)"
+      name="newTitle"
+    />
+    <textarea
+      placeholder="Description (optional)"
+      [ngModel]="newDescription()"
+      (ngModelChange)="newDescription.set($event)"
+      name="newDescription"
+    ></textarea>
+    <button type="button" (click)="add()" [disabled]="!newTitle().trim()">Add</button>
+  </section>
+
+  <section class="filters">
+    <label>
+      <input type="checkbox" [checked]="showCompleted()" (change)="toggleShowCompleted()" />
+      Show completed
+    </label>
+  </section>
+
+  <section class="tasks">
+    <div *ngIf="tasks().length === 0" class="empty">No tasks to show.</div>
+
+    <div *ngFor="let task of tasks()" class="task card" [class.done]="task.done">
+      <ng-container *ngIf="editing()?.id !== task.id; else editTpl">
+        <div class="task-main">
+          <input
+            type="checkbox"
+            [checked]="task.done"
+            (change)="markDone(task, !task.done)"
+          />
+          <div class="task-body">
+            <h3>{{ task.title }}</h3>
+            <p *ngIf="task.description">{{ task.description }}</p>
+            <small>{{ task.createdAt | date: 'short' }}</small>
+          </div>
+        </div>
+        <div class="task-actions">
+          <button type="button" (click)="startEdit(task)">Edit</button>
+          <button type="button" class="danger" (click)="remove(task)">Delete</button>
+        </div>
+      </ng-container>
+
+      <ng-template #editTpl>
+        <input
+          type="text"
+          [ngModel]="editing()!.title"
+          (ngModelChange)="updateEditTitle($event)"
+        />
+        <textarea
+          [ngModel]="editing()!.description"
+          (ngModelChange)="updateEditDescription($event)"
+        ></textarea>
+        <div class="task-actions">
+          <button type="button" (click)="saveEdit()">Save</button>
+          <button type="button" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+</div>
