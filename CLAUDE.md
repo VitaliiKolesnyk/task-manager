@@ -54,7 +54,7 @@ src/test/java/com/service/
 
 On `mvnw package`, the following runs automatically (all bound to early Maven phases):
 
-1. `frontend-maven-plugin` downloads Node v20.11.1 / npm 10.2.4 (pinned, isolated
+1. `frontend-maven-plugin` downloads Node v24.18.0 / npm 11.16.0 (pinned, isolated
    from any system Node), then runs `npm install` and `npm run build`.
 2. Angular's `application` builder emits to `src/main/frontend/dist/task-manager-ui/browser`.
 3. `maven-resources-plugin` copies that output into `target/classes/static`.
