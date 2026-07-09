@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -66,6 +67,22 @@ class AuthFlowTests {
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
+    void multiByteOverlongPasswordIsRejectedNotServerError() throws Exception {
+        // "é" is 1 UTF-16 code unit but 2 UTF-8 bytes: length() == 40 (<= 72) yet
+        // the UTF-8 encoding is 80 bytes (> 72), which used to slip past the old
+        // password.length() check and blow up BCrypt with an IllegalArgumentException.
+        String username = "multibyte-" + UUID.randomUUID();
+        String password = "é".repeat(40);
+        byte[] body = objectMapper.writeValueAsBytes(Map.of("username", username, "password", password));
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").isNotEmpty());
     }

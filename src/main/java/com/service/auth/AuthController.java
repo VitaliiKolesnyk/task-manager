@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
 @RestController
@@ -42,7 +43,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new ErrorResponse(
                     "Password must be at least " + MIN_PASSWORD_LENGTH + " characters long."));
         }
-        if (password.length() > MAX_PASSWORD_LENGTH) {
+        if (password.getBytes(StandardCharsets.UTF_8).length > MAX_PASSWORD_LENGTH) {
             return ResponseEntity.badRequest().body(new ErrorResponse(
                     "Password must be at most " + MAX_PASSWORD_LENGTH + " characters long."));
         }
