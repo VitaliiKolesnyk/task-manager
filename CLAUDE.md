@@ -147,7 +147,25 @@ request; logout just discards the token client-side.
 | PUT    | `/api/tasks/{id}` | Partial update; only non-null `title`/`description`/`done` applied; 404 if not owned |
 | DELETE | `/api/tasks/{id}` | 204 on success, 404 if missing or not owned            |
 
-## Configuration
+## Git conventions
+
+- **Branch name:** a brief description of the feature (e.g. `add-task-due-dates`,
+  `fix-login-redirect`). Use short, hyphenated, lowercase words.
+- **Commit message:** a description of the feature or fix (e.g.
+  `Add due dates to tasks`, `Fix redirect loop on expired token`). Write it in the
+  imperative mood, describing what the change does.
+
+### Pull requests
+
+Every pull request **must** include the following two sections in its description:
+
+- **Description** — what the change does and why. Summarize the feature or fix,
+  the motivation behind it, and any notable implementation decisions or trade-offs.
+- **Testing plan** — how the change was verified. List the steps taken to test it
+  (e.g. `.\mvnw.cmd clean package` runs green, specific manual flows exercised,
+  new/updated automated tests) so a reviewer can reproduce the verification.
+
+Use a PR title in the imperative mood, matching the commit-message style above.
 
 `src/main/resources/application.properties`:
 - `server.port=8080`
