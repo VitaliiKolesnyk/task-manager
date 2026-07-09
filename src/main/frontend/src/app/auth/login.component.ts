@@ -20,6 +20,7 @@ export class LoginComponent {
   readonly altText = "Don't have an account?";
   readonly altLink = '/register';
   readonly altLabel = 'Register';
+  readonly passwordHint: string | null = null;
 
   readonly username = signal('');
   readonly password = signal('');

@@ -24,6 +24,8 @@
       />
     </label>
 
+    <p *ngIf="passwordHint" class="hint">{{ passwordHint }}</p>
+
     <p *ngIf="error()" class="error">{{ error() }}</p>
 
     <button type="submit" [disabled]="loading()">{{ submitLabel }}</button>
