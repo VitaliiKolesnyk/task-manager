@@ -35,7 +35,7 @@ class AuthFlowTests {
     @Test
     void registerThenAccessOwnTasks() throws Exception {
         String username = "test-" + UUID.randomUUID();
-        String body = "{\"username\":\"" + username + "\",\"password\":\"secret-pw\"}";
+        String body = "{\"username\":\"" + username + "\",\"password\":\"secret-pw-123\"}";
 
         MvcResult reg = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,9 +60,20 @@ class AuthFlowTests {
     }
 
     @Test
+    void weakPasswordIsRejected() throws Exception {
+        String username = "weak-" + UUID.randomUUID();
+        String body = "{\"username\":\"" + username + "\",\"password\":\"short\"}";
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
     void duplicateRegistrationIsRejected() throws Exception {
         String username = "dup-" + UUID.randomUUID();
-        String body = "{\"username\":\"" + username + "\",\"password\":\"secret-pw\"}";
+        String body = "{\"username\":\"" + username + "\",\"password\":\"secret-pw-123\"}";
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON).content(body))

@@ -23,6 +23,9 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private static final int MIN_PASSWORD_LENGTH = 12;
+    private static final int MAX_PASSWORD_LENGTH = 72;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -34,6 +37,14 @@ public class AuthController {
         String password = request.password() == null ? "" : request.password();
         if (username.isEmpty() || password.isEmpty()) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Username and password are required."));
+        }
+        if (password.length() < MIN_PASSWORD_LENGTH) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(
+                    "Password must be at least " + MIN_PASSWORD_LENGTH + " characters long."));
+        }
+        if (password.length() > MAX_PASSWORD_LENGTH) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(
+                    "Password must be at most " + MAX_PASSWORD_LENGTH + " characters long."));
         }
         if (userRepository.existsByUsername(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Username already taken."));
