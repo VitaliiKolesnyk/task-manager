@@ -20,7 +20,7 @@ export class RegisterComponent {
   readonly altText = 'Already have an account?';
   readonly altLink = '/login';
   readonly altLabel = 'Log in';
-  readonly passwordHint = 'Use at least 12 characters.';
+  readonly passwordHint = 'Use at least 12 characters, including a capital letter and a digit.';
 
   readonly username = signal('');
   readonly password = signal('');
@@ -36,6 +36,14 @@ export class RegisterComponent {
     }
     if (password.length < 12) {
       this.error.set('Password must be at least 12 characters long.');
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      this.error.set('Password must contain at least one capital letter.');
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      this.error.set('Password must contain at least one digit.');
       return;
     }
     this.loading.set(true);

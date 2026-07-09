@@ -46,6 +46,14 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new ErrorResponse(
                     "Password must be at most " + MAX_PASSWORD_LENGTH + " characters long."));
         }
+        if (password.chars().noneMatch(c -> c >= 'A' && c <= 'Z')) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(
+                    "Password must contain at least one capital letter."));
+        }
+        if (password.chars().noneMatch(c -> c >= '0' && c <= '9')) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(
+                    "Password must contain at least one digit."));
+        }
         if (userRepository.existsByUsername(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Username already taken."));
         }
