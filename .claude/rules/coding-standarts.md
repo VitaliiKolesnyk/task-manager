@@ -1,4 +1,7 @@
 ---
+paths:
+  - "src/main/java/com/**"
+  - "src/test/java/com/**"
 description: Core coding conventions for the Task Manager codebase
 ---
 
