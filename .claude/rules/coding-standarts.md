@@ -1,5 +1,5 @@
 ---
-description: Core coding conventions for the JobPortal React codebase
+description: Core coding conventions for the Task Manager codebase
 ---
 
 # Coding Standards — Spring Boot + Angular

@@ -1,12 +1,5 @@
 ---
 paths:
-  - "src/main/java/com/service/task/TaskRepository.java"
-  - "src/main/java/com/service/user/UserRepository.java"
-description: Data flow, state management, and db conventions
----
-
----
-paths:
   - "src/main/java/com/service/task/Task.java"
   - "src/main/java/com/service/task/TaskRepository.java"
   - "src/main/java/com/service/user/User.java"

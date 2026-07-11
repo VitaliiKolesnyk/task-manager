@@ -64,18 +64,10 @@ One-paragraph summary of the feature from the user's perspective.
 Step-by-step walkthrough of what happens when a user interacts with
 this feature.
 
-### Key Files
-
-| File               | Role             |
-| ------------------ | ---------------- |
-| `src/pages/...`    | Page component   |
-| `src/context/...`  | State management |
-| `src/services/...` | Data operations  |
-
 ### Data Flow Diagram
 
 ```
-User Action → Component → Context Function → Service → DB
+User Action → Component → Service → DB
                 ↑                                          |
                 └──────────── state update ←───────────────┘
 ```

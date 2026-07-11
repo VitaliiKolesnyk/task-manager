@@ -1,4 +1,6 @@
+___
 description: High-level architecture overview — stack, context layers, and key libraries
+___
 
 ## Overview
 
