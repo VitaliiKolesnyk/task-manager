@@ -2,18 +2,6 @@
 
 Guidance for working in this repository.
 
-## Overview
-
-**task-manager** is a full-stack task CRUD app packaged as a **single deployable
-artifact**. A Spring Boot backend serves a REST API *and* the compiled Angular
-frontend from one port (`8080`). There is no separate frontend server in
-production — Maven builds the Angular app and bundles it into the Boot fat JAR.
-
-- **Backend:** Spring Boot 4.1.0, Java 21, Spring Web MVC + Spring Data JPA
-- **Frontend:** Angular 18 (standalone components, `application` builder)
-- **Database:** PostgreSQL 16 (via Docker Compose)
-- **Build:** Maven (wrapper `mvnw.cmd`), with `frontend-maven-plugin` driving the Angular build
-
 ## Project layout
 
 ```
@@ -105,73 +93,6 @@ cd src\main\frontend && npm start                                          # Ang
 `task.service.ts` calls the API with same-origin relative paths (`/api/tasks`), so
 add a proxy (`ng serve --proxy-config`) targeting `http://localhost:8080` if you
 develop against `:4200`.
-
-## Authentication
-
-Stateless **JWT** (Bearer token), self-registration. There is no server session — the
-frontend stores the token in `localStorage` and an Angular HTTP interceptor
-(`src/app/auth/auth.interceptor.ts`) attaches `Authorization: Bearer <token>` to every
-request; logout just discards the token client-side.
-
-- Backend flow: `JwtAuthenticationFilter` validates the Bearer token and populates the
-  `SecurityContext`; `SecurityConfig` makes `/api/tasks/**` require auth and everything
-  else (static assets, `/api/auth/**`, SPA routes) permit-all. Unauthenticated API calls
-  return **401** (via `HttpStatusEntryPoint`) so the interceptor can redirect to `/login`.
-- **Per-user isolation:** `Task` has an `owner` (`@ManyToOne User`). `TaskController`
-  resolves the current user from the `Principal` and every query is owner-scoped
-  (`TaskRepository.findByIdAndOwner`, etc.), so users only ever see/modify their own tasks
-  — cross-user access returns 404.
-- Frontend routing: `/login`, `/register`, and a `authGuard`-protected `/` task view.
-  `AppComponent` is a shell (header + logout, shown only when authenticated) with a
-  `<router-outlet>`; the task UI lives in `TasksComponent`.
-- `owner_id` on `tasks` is **nullable** on purpose — it lets the column be added to a table
-  that already holds legacy ownerless rows; new tasks always get an owner, so ownerless
-  rows are simply invisible to everyone.
-- `jwt.secret` / `jwt.expiration-ms` live in `application.properties`; override the secret
-  in production via the `JWT_SECRET` env var.
-
-## REST API
-
-### Auth (`/api/auth`, public)
-| Method | Path        | Notes                                                      |
-|--------|-------------|------------------------------------------------------------|
-| POST   | `/register` | Body `{ username, password }` → `{ token, username }`; 409 if taken |
-| POST   | `/login`    | Body `{ username, password }` → `{ token, username }`; 401 on bad creds |
-| GET    | `/me`       | Returns `{ username }` for a valid token, else 401         |
-
-### Tasks (`/api/tasks`, requires Bearer token — scoped to the current user)
-| Method | Path         | Notes                                                        |
-|--------|--------------|-------------------------------------------------------------|
-| GET    | `/api/tasks` | Query `?includeDone=true` to include completed tasks; sorted newest-first |
-| POST   | `/api/tasks` | Body: `{ title, description }` (owner set from the token)    |
-| PUT    | `/api/tasks/{id}` | Partial update; only non-null `title`/`description`/`done` applied; 404 if not owned |
-| DELETE | `/api/tasks/{id}` | 204 on success, 404 if missing or not owned            |
-
-## Git conventions
-
-- **Branch name:** a brief description of the feature (e.g. `add-task-due-dates`,
-  `fix-login-redirect`). Use short, hyphenated, lowercase words.
-- **Commit message:** a description of the feature or fix (e.g.
-  `Add due dates to tasks`, `Fix redirect loop on expired token`). Write it in the
-  imperative mood, describing what the change does.
-
-### Pull requests
-
-Every pull request **must** include the following two sections in its description:
-
-- **Description** — what the change does and why. Summarize the feature or fix,
-  the motivation behind it, and any notable implementation decisions or trade-offs.
-- **Testing plan** — how the change was verified. List the steps taken to test it
-  (e.g. `.\mvnw.cmd clean package` runs green, specific manual flows exercised,
-  new/updated automated tests) so a reviewer can reproduce the verification.
-
-Use a PR title in the imperative mood, matching the commit-message style above.
-
-`src/main/resources/application.properties`:
-- `server.port=8080`
-- Datasource: `jdbc:postgresql://localhost:5432/taskmanager`, `postgres`/`postgres`
-- `spring.jpa.hibernate.ddl-auto=update` — Hibernate auto-manages the schema (dev convenience; not for prod)
-- `spring.jpa.open-in-view=false`
 
 ## Conventions & gotchas
 
